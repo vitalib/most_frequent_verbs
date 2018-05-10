@@ -9,39 +9,48 @@ def is_verb(word):
     if not word:
         return False
     part_of_speach = pos_tag([word])
-    return part_of_speach[0][1] == 'VB'
+    return 'VB' in part_of_speach[0][1]
 
 
-def fetch_python_files_from_dir(dir_path, files_quantity):
+def fetch_python_files_from_dir(dir_path):
     for dir_name, subdirs, files in os.walk(dir_path):
         for file in files:
-            if file.endswith('.py') and files_quantity > 0:
+            if file.endswith('.py'):
                 yield os.path.join(dir_name, file)
-                files_quantity -= 1
-            if files_quantity <= 0:
-                raise StopIteration()
 
 
-def get_trees(dir_path, include_filenames=False,
-              include_file_content=False, max_files=100):
-    for filename in fetch_python_files_from_dir(dir_path, max_files):
+def get_ast_tree(file_content):
+    try:
+        tree = ast.parse(file_content)
+    except SyntaxError:
+        tree = None
+    return tree
+
+
+def get_file_content(file_path):
+    with open(file_path, 'r', encoding='utf-8') as file:
+        return file.read()
+
+
+def get_trees_with_filenames(dir_path, include_file_content=False):
+    for filename in fetch_python_files_from_dir(dir_path):
+        file_content = get_file_content(filename)
+        tree = get_ast_tree(file_content)
+        tree_info = {'title': filename, 'tree': tree}
+        if include_file_content:
+            tree_info['file_content'] = file_content
+        yield tree_info
+
+
+def get_trees(dir_path):
+    for filename in fetch_python_files_from_dir(dir_path):
         with open(filename, 'r', encoding='utf-8') as file:
             file_content = file.read()
-        try:
-            tree = ast.parse(file_content)
-        except SyntaxError:
-            tree = None
-        tree_info = []
-        if include_filenames:
-            tree_info.append(filename)
-        if include_file_content:
-            tree_info.append(file_content)
-        tree_info.append(tree)
-        yield tuple(tree_info)
+        yield get_ast_tree(file_content)
 
 
 def get_non_empty_trees(trees):
-    yield from (tree[-1] for tree in trees if tree[-1])
+    yield from (tree for tree in trees if tree)
 
 
 def get_all_names(tree):

@@ -11,11 +11,11 @@ pip install -r requirements.txt
 Example of utilization 
 ```python
 # test.py
-import dclnt
+import function_names_analyzer 
 
 dir_path = '/usr/lib/python3.6'
-most_used_functions = dclnt.get_top_functions_names_in_path(dir_path)
-most_used_verbs_in_functions_names = dclnt.get_top_verbs_in_path(dir_path)
+most_used_functions = function_names_analyzer.get_top_functions_names_in_path(dir_path)
+most_used_verbs_in_functions_names = function_names_analyzer.get_top_verbs_in_path(dir_path)
 
 print(most_used_functions)
 print(most_used_verbs_in_functions_names)
