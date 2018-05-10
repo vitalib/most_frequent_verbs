@@ -24,7 +24,7 @@ print(most_used_verbs_in_functions_names)
 ```bash
 python3 test.py
 [('decode', 201), ('encode', 200), ('close', 152), ('getregentry', 123), ('write', 61), ('run', 58), ('transform', 52), ('reset', 50), ('read', 46), ('get', 42)]
-[('get', 760), ('add', 176), ('find', 131), ('run', 112), ('make', 104), ('do', 77), ('remove', 65), ('save', 39), ('finalize', 36), ('replace', 32)]
+[('get', 760), ('is', 188), ('add', 176), ('find', 131), ('run', 112), ('make', 104), ('do', 77), ('remove', 65), ('has', 44), ('save', 39)]
 ```
 
 
